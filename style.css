@@ -72,7 +72,6 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem; /* Added gap to prevent touching */
     margin: 1.5rem 0;
 }
 
@@ -84,7 +83,6 @@ h1 {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     margin: 0;
-    flex: 1; /* Allow h1 to grow and push language select */
 }
 
 #languageSelect {
@@ -102,7 +100,6 @@ h1 {
     background-position: right 0.6rem top 50%;
     background-size: 0.6rem auto;
     transition: border-color 0.2s ease, background-color 0.2s ease;
-    flex-shrink: 0; /* Prevent shrinking */
 }
 #languageSelect:hover, #languageSelect:focus {
     border-color: var(--accent-primary);
@@ -352,205 +349,7 @@ input:checked + .slider:before {
     border-radius: 6px;
 }
 
-/* Mobile-Specific Optimizations */
-@media (max-width: 768px) {
-    body {
-        padding: 0.8rem;
-    }
-    header {
-        gap: 0.5rem; /* Smaller gap on mobile */
-        flex-wrap: wrap; /* Allow wrapping if needed */
-    }
-    h1 {
-        font-size: clamp(1.5rem, 5vw, 2rem); /* Slightly smaller on mobile */
-    }
-    #languageSelect {
-        font-size: 0.9rem;
-        padding: 0.4rem 1.5rem 0.4rem 0.6rem;
-        background-size: 0.5rem auto;
-        background-position: right 0.4rem top 50%;
-    }
-    .main-container {
-        padding: 0;
-    }
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-        padding-bottom: 1rem;
-    }
-    .card {
-        padding: 1rem;
-        transition: none; /* Disable transitions for perf */
-    }
-    .card:hover {
-        transform: none;
-        box-shadow: 0 2px 8px var(--shadow-color);
-    }
-    .weather-card {
-        padding: 1rem;
-        gap: 1rem;
-    }
-    .weather-main {
-        gap: 0.75rem;
-    }
-    .weather-main .icon {
-        width: 60px;
-        height: 60px;
-    }
-    .weather-temp {
-        font-size: clamp(2rem, 8vw, 2.8rem);
-    }
-    .weather-desc {
-        font-size: 1rem;
-    }
-    .weather-details {
-        gap: 0.5rem;
-        justify-content: space-around;
-    }
-    .weather-details > div {
-        flex: 1 1 100%;
-        text-align: center;
-        min-width: auto;
-    }
-    .weather-details > div > .value {
-        font-size: 1.1rem;
-    }
-    .charts-wrapper {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-        margin-top: 1rem;
-    }
-    .chart-container {
-        height: 250px;
-        padding: 1rem;
-    }
-    footer {
-        margin: 2rem 0 1rem;
-    }
-    /* Bot Mobile Fixes */
-    .bot-container {
-        bottom: 10px;
-        right: 10px;
-        gap: 6px;
-        align-items: center; /* Better alignment */
-    }
-    .bot-avatar {
-        width: 42px;
-        height: 42px;
-        box-shadow: 0 2px 6px var(--shadow-color);
-    }
-    .bot-avatar svg {
-        width: 24px;
-        height: 24px;
-    }
-    .bot-avatar:hover {
-        transform: none; /* Disable hover scale on mobile */
-    }
-    .bot-message {
-        max-width: min(75vw, 220px);
-        padding: 0.6rem;
-        font-size: 0.8rem;
-        box-shadow: 0 2px 6px var(--shadow-color);
-        margin-left: 4px; /* Slight indent */
-    }
-    .bot-message::after {
-        right: auto;
-        left: 12px;
-        border-left: none;
-        border-right: 6px solid var(--card-color);
-    }
-    .bot-log-tooltip {
-        bottom: 52px;
-        right: auto;
-        left: 0;
-        width: min(85vw, 260px);
-        max-height: 40vh;
-        padding: 0.6rem;
-        box-shadow: 0 2px 6px var(--shadow-color);
-        transition: none; /* Disable for perf */
-    }
-    .bot-log-tooltip.visible {
-        transform: none;
-    }
-    .bot-log-message {
-        font-size: 0.75rem;
-    }
-    .bot-log-message .timestamp {
-        font-size: 0.6rem;
-    }
-}
-
-@media (max-width: 480px) {
-    body {
-        padding: 0.6rem;
-    }
-    header {
-        justify-content: center;
-        gap: 0.75rem;
-    }
-    h1 {
-        text-align: center;
-        flex: none;
-    }
-    #languageSelect {
-        order: -1; /* Move language select above if wrapping */
-    }
-    .dashboard-grid {
-        gap: 0.6rem;
-    }
-    .card {
-        padding: 0.8rem;
-    }
-    .weather-card {
-        padding: 0.8rem;
-    }
-    .weather-details > div > .value {
-        font-size: 1rem;
-    }
-    .chart-container {
-        height: 220px;
-        padding: 0.8rem;
-    }
-    .bot-container {
-        bottom: 8px;
-        right: 8px;
-        left: 8px;
-        justify-content: center;
-    }
-    .bot-message {
-        max-width: 80vw;
-        margin-left: 0;
-        margin-right: auto;
-    }
-    .bot-message::after {
-        left: 50%;
-        transform: translateX(-50%);
-        right: auto;
-        border-right: none;
-        border-left: none;
-        border-top: 6px solid var(--card-color);
-        bottom: auto;
-        top: -6px;
-    }
-    .bot-log-tooltip {
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90vw;
-        bottom: 48px;
-    }
-    .bot-log-tooltip::before {
-        content: '';
-        position: absolute;
-        top: -6px;
-        left: 50%;
-        transform: translateX(-50%);
-        border: 6px solid transparent;
-        border-top: 6px solid transparent;
-        border-bottom: 6px solid var(--card-color);
-    }
-}
-
-/* Desktop Styles (Unchanged) */
+/* Responsiveness */
 @media (min-width: 769px) {
     body { padding: 1.5rem; }
     .main-container { padding: 0 1rem; }
@@ -569,4 +368,16 @@ input:checked + .slider:before {
     .card, .chart-container {
         padding: 1.5rem;
     }
+}
+
+@media (max-width: 400px) {
+    body { padding: 0.8rem; }
+    h1 { font-size: clamp(1.5rem, 4vw, 1.8rem); }
+    .card, .chart-container { padding: 1rem; }
+    .weather-temp { font-size: clamp(2rem, 5vw, 2.5rem); }
+    .weather-details { gap: 0.8rem; }
+    .bot-avatar { width: 44px; height: 44px; }
+    .bot-avatar svg { width: 24px; height: 24px; }
+    .bot-message { max-width: 200px; font-size: 0.8rem; }
+    .bot-log-tooltip { bottom: 55px; }
 }
