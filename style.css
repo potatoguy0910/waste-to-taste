@@ -10,7 +10,7 @@
     --accent-ph: #7c4dff;
     --accent-wind: #42a5f5;
     --accent-alert: #ff1744;
-    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* Fallbacks for better mobile perf */
+    --font-family: 'Inter', sans-serif;
     --shadow-color: rgba(0, 0, 0, 0.3);
     --glow-color-1: var(--accent-primary);
     --glow-color-2: var(--accent-ph);
@@ -26,7 +26,6 @@ body {
     overflow-x: hidden;
     font-size: 16px;
     -webkit-font-smoothing: antialiased; /* Improve text rendering */
-    touch-action: manipulation; /* Improve mobile scrolling perf */
 }
 
 /* Aurora Effect (Desktop Only) */
@@ -73,6 +72,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem; /* Added gap to prevent touching */
     margin: 1.5rem 0;
 }
 
@@ -84,6 +84,7 @@ h1 {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     margin: 0;
+    flex: 1; /* Allow h1 to grow and push language select */
 }
 
 #languageSelect {
@@ -101,6 +102,7 @@ h1 {
     background-position: right 0.6rem top 50%;
     background-size: 0.6rem auto;
     transition: border-color 0.2s ease, background-color 0.2s ease;
+    flex-shrink: 0; /* Prevent shrinking */
 }
 #languageSelect:hover, #languageSelect:focus {
     border-color: var(--accent-primary);
@@ -247,7 +249,7 @@ input:checked + .slider:before {
     transform: translateX(22px);
 }
 
-/* Bot Styles - Optimized for Mobile */
+/* Bot Styles */
 .bot-container {
     position: fixed;
     bottom: 15px;
@@ -256,7 +258,6 @@ input:checked + .slider:before {
     display: flex;
     align-items: flex-end;
     gap: 8px;
-    /* On mobile, reduce gap and ensure it doesn't overlap content */
 }
 .bot-avatar {
     width: 48px;
@@ -266,11 +267,10 @@ input:checked + .slider:before {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px var(--shadow-color); /* Lighter shadow for perf */
+    box-shadow: 0 4px 12px var(--shadow-color);
     border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
     transition: transform 0.2s ease;
-    flex-shrink: 0; /* Prevent shrinking on small screens */
 }
 .bot-avatar:hover {
     transform: scale(1.1);
@@ -286,14 +286,11 @@ input:checked + .slider:before {
     color: var(--text-primary);
     padding: 0.7rem;
     max-width: 240px;
-    box-shadow: 0 2px 8px var(--shadow-color); /* Lighter shadow */
+    box-shadow: 0 4px 12px var(--shadow-color);
     font-size: 0.85rem;
     line-height: 1.3;
     transform-origin: bottom right;
     transition: opacity 0.2s ease, transform 0.2s ease;
-    /* Ensure it doesn't overflow on mobile */
-    word-wrap: break-word;
-    hyphens: auto;
 }
 .bot-message.visible {
     opacity: 1;
@@ -320,15 +317,13 @@ input:checked + .slider:before {
     border-radius: 10px;
     border: 1px solid var(--border-color);
     padding: 0.8rem;
-    box-shadow: 0 2px 8px var(--shadow-color); /* Lighter shadow for perf */
+    box-shadow: 0 4px 12px var(--shadow-color);
     transition: opacity 0.2s ease, transform 0.2s ease;
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
     scrollbar-width: thin;
     scrollbar-color: var(--accent-primary) var(--bg-color);
-    /* On mobile, adjust positioning to avoid edge clipping */
-    right: -10px; /* Slight offset to prevent clipping */
 }
 .bot-log-tooltip.visible {
     opacity: 1;
@@ -357,119 +352,205 @@ input:checked + .slider:before {
     border-radius: 6px;
 }
 
-/* Mobile Optimizations - Reduce animations, shadows, and improve layout */
+/* Mobile-Specific Optimizations */
 @media (max-width: 768px) {
     body {
         padding: 0.8rem;
-        /* Disable heavy transitions for perf */
-        .card,
-        .bot-avatar,
-        .bot-message,
-        .bot-log-tooltip {
-            transition: none; /* Disable transitions on mobile to reduce lag */
-        }
-        .card:hover {
-            transform: none; /* Disable hover effects on mobile */
-            box-shadow: 0 2px 4px var(--shadow-color); /* Minimal shadow */
-        }
-        .bot-avatar:hover {
-            transform: none;
-        }
+    }
+    header {
+        gap: 0.5rem; /* Smaller gap on mobile */
+        flex-wrap: wrap; /* Allow wrapping if needed */
+    }
+    h1 {
+        font-size: clamp(1.5rem, 5vw, 2rem); /* Slightly smaller on mobile */
+    }
+    #languageSelect {
+        font-size: 0.9rem;
+        padding: 0.4rem 1.5rem 0.4rem 0.6rem;
+        background-size: 0.5rem auto;
+        background-position: right 0.4rem top 50%;
     }
     .main-container {
-        padding: 0 0.25rem;
+        padding: 0;
     }
     .dashboard-grid {
         grid-template-columns: 1fr;
         gap: 0.75rem;
+        padding-bottom: 1rem;
+    }
+    .card {
+        padding: 1rem;
+        transition: none; /* Disable transitions for perf */
+    }
+    .card:hover {
+        transform: none;
+        box-shadow: 0 2px 8px var(--shadow-color);
     }
     .weather-card {
         padding: 1rem;
         gap: 1rem;
     }
-    .weather-details {
-        gap: 0.5rem;
-        justify-content: center;
-    }
-    .weather-details > div {
-        flex: 1 1 45%; /* Better wrapping on small screens */
-        min-width: 120px;
-    }
-    .charts-wrapper {
+    .weather-main {
         gap: 0.75rem;
     }
+    .weather-main .icon {
+        width: 60px;
+        height: 60px;
+    }
+    .weather-temp {
+        font-size: clamp(2rem, 8vw, 2.8rem);
+    }
+    .weather-desc {
+        font-size: 1rem;
+    }
+    .weather-details {
+        gap: 0.5rem;
+        justify-content: space-around;
+    }
+    .weather-details > div {
+        flex: 1 1 100%;
+        text-align: center;
+        min-width: auto;
+    }
+    .weather-details > div > .value {
+        font-size: 1.1rem;
+    }
+    .charts-wrapper {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
     .chart-container {
-        height: 250px; /* Smaller height on mobile */
+        height: 250px;
         padding: 1rem;
     }
-    /* Bot adjustments for mobile */
+    footer {
+        margin: 2rem 0 1rem;
+    }
+    /* Bot Mobile Fixes */
     .bot-container {
         bottom: 10px;
         right: 10px;
         gap: 6px;
-        /* Center on very small screens if needed */
-        @media (max-width: 400px) {
-            left: 50%;
-            transform: translateX(-50%);
-            right: auto;
-            justify-content: center;
-            gap: 4px;
-        }
+        align-items: center; /* Better alignment */
     }
     .bot-avatar {
-        width: 40px;
-        height: 40px;
-        box-shadow: 0 1px 3px var(--shadow-color); /* Minimal shadow */
+        width: 42px;
+        height: 42px;
+        box-shadow: 0 2px 6px var(--shadow-color);
     }
     .bot-avatar svg {
-        width: 22px;
-        height: 22px;
+        width: 24px;
+        height: 24px;
+    }
+    .bot-avatar:hover {
+        transform: none; /* Disable hover scale on mobile */
     }
     .bot-message {
-        max-width: min(80vw, 200px);
+        max-width: min(75vw, 220px);
         padding: 0.6rem;
         font-size: 0.8rem;
-        box-shadow: 0 1px 3px var(--shadow-color);
-        /* Reposition arrow for better fit */
-        @media (max-width: 400px) {
-            max-width: 70vw;
-            &::after {
-                right: auto;
-                left: 12px;
-                border-left: none;
-                border-right: 6px solid var(--card-color);
-            }
-        }
+        box-shadow: 0 2px 6px var(--shadow-color);
+        margin-left: 4px; /* Slight indent */
+    }
+    .bot-message::after {
+        right: auto;
+        left: 12px;
+        border-left: none;
+        border-right: 6px solid var(--card-color);
     }
     .bot-log-tooltip {
-        bottom: 55px;
-        width: clamp(180px, 85vw, 260px);
-        max-height: 50vh; /* Limit height relative to viewport */
+        bottom: 52px;
+        right: auto;
+        left: 0;
+        width: min(85vw, 260px);
+        max-height: 40vh;
         padding: 0.6rem;
-        right: -5px;
-        /* Center on very small screens */
-        @media (max-width: 400px) {
-            left: 50%;
-            right: auto;
-            transform: translateX(-50%);
-            bottom: 50px;
-            width: 85vw;
-            &::before { /* Add arrow for centered tooltip */
-                content: '';
-                position: absolute;
-                top: 100%;
-                left: 50%;
-                transform: translateX(-50%);
-                border: 6px solid transparent;
-                border-top: 6px solid var(--card-color);
-            }
-        }
+        box-shadow: 0 2px 6px var(--shadow-color);
+        transition: none; /* Disable for perf */
+    }
+    .bot-log-tooltip.visible {
+        transform: none;
     }
     .bot-log-message {
         font-size: 0.75rem;
     }
+    .bot-log-message .timestamp {
+        font-size: 0.6rem;
+    }
 }
 
+@media (max-width: 480px) {
+    body {
+        padding: 0.6rem;
+    }
+    header {
+        justify-content: center;
+        gap: 0.75rem;
+    }
+    h1 {
+        text-align: center;
+        flex: none;
+    }
+    #languageSelect {
+        order: -1; /* Move language select above if wrapping */
+    }
+    .dashboard-grid {
+        gap: 0.6rem;
+    }
+    .card {
+        padding: 0.8rem;
+    }
+    .weather-card {
+        padding: 0.8rem;
+    }
+    .weather-details > div > .value {
+        font-size: 1rem;
+    }
+    .chart-container {
+        height: 220px;
+        padding: 0.8rem;
+    }
+    .bot-container {
+        bottom: 8px;
+        right: 8px;
+        left: 8px;
+        justify-content: center;
+    }
+    .bot-message {
+        max-width: 80vw;
+        margin-left: 0;
+        margin-right: auto;
+    }
+    .bot-message::after {
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
+        border-right: none;
+        border-left: none;
+        border-top: 6px solid var(--card-color);
+        bottom: auto;
+        top: -6px;
+    }
+    .bot-log-tooltip {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90vw;
+        bottom: 48px;
+    }
+    .bot-log-tooltip::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top: 6px solid transparent;
+        border-bottom: 6px solid var(--card-color);
+    }
+}
+
+/* Desktop Styles (Unchanged) */
 @media (min-width: 769px) {
     body { padding: 1.5rem; }
     .main-container { padding: 0 1rem; }
@@ -488,13 +569,4 @@ input:checked + .slider:before {
     .card, .chart-container {
         padding: 1.5rem;
     }
-}
-
-@media (max-width: 400px) {
-    body { padding: 0.6rem; }
-    h1 { font-size: clamp(1.5rem, 4vw, 1.8rem); }
-    .card, .chart-container { padding: 0.8rem; }
-    .weather-temp { font-size: clamp(2rem, 5vw, 2.5rem); }
-    .weather-details { gap: 0.6rem; }
-    .bot-container { bottom: 8px; right: 8px; }
 }
