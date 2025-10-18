@@ -470,7 +470,18 @@ input:checked+.slider:before {
         padding: 1rem; /* Reduced card padding */
         border-radius: 16px; /* Slightly smaller radius */
     }
-    .charts-wrapper, .dashboard-grid { 
+    .dashboard-grid { 
+        grid-template-columns: repeat(2, 1fr); /* Two columns for cards */
+        gap: 1rem; /* Reduced gap */
+    }
+    .card:not(.weather-card) {
+        aspect-ratio: 1 / 1; /* Make non-weather cards square */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .charts-wrapper { 
         grid-template-columns: 1fr; 
         gap: 1rem; /* Reduced gap */
     }
@@ -479,6 +490,7 @@ input:checked+.slider:before {
         gap: 1rem; /* Reduced gap */
         text-align: center; 
         padding: 1.5rem; /* Reduced padding */
+        grid-column: 1 / -1; /* Full width */
     }
     .weather-details { 
         gap: 1rem; /* Reduced gap */
@@ -591,6 +603,14 @@ input:checked+.slider:before {
         padding: 0.75rem; /* Minimal padding */
         border-radius: 12px;
     }
+    .dashboard-grid { 
+        grid-template-columns: repeat(2, 1fr); /* Keep two columns */
+        gap: 0.75rem;
+    }
+    .card:not(.weather-card) {
+        aspect-ratio: 1 / 1; /* Maintain square */
+        padding: 0.75rem;
+    }
     .weather-temp { 
         font-size: 2.5rem; /* Smaller temp */
     }
@@ -644,9 +664,6 @@ input:checked+.slider:before {
         bottom: 55px;
         padding: 0.5rem;
         max-height: 250px;
-    }
-    .dashboard-grid {
-        gap: 0.75rem;
     }
     .charts-wrapper {
         gap: 0.75rem;
