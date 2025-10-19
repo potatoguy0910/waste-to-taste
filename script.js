@@ -77,7 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 goodEvening: "Good evening. Conditions are normal. Time to check plant leaves.",
                 moistureLowTip: "Soil moisture is dropping. Consider adjusting irrigation cycles.",
                 highHumidityAlert: "High humidity detected. Increase ventilation to prevent mold.",
-                lowWindTip: "Calm winds today—ensure fans are running for pollination support."
+                lowWindTip: "Calm winds today—ensure fans are running for pollination support.",
+                moistureTooLowCritical: "CRITICAL: Moisture critically low! Immediate irrigation needed to prevent wilting.",
+                moistureTooHighCritical: "CRITICAL: Moisture critically high! Risk of root rot—reduce watering."
             },
             botInit: `Hello! System initialized at \${time}. Monitoring now...`
         },
@@ -134,7 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 goodEvening: "शुभ संध्या। स्थितियां सामान्य हैं। पौधों की पत्तियों की जांच करने का समय।",
                 moistureLowTip: "मिट्टी की नमी कम हो रही है। सिंचाई चक्रों को समायोजित करने पर विचार करें।",
                 highHumidityAlert: "उच्च आर्द्रता का पता चला। मोल्ड को रोकने के लिए वेंटिलेशन बढ़ाएं।",
-                lowWindTip: "आज शांत हवाएं—परागण समर्थन के लिए पंखे चल रहे हैं सुनिश्चित करें।"
+                lowWindTip: "आज शांत हवाएं—परागण समर्थन के लिए पंखे चल रहे हैं सुनिश्चित करें।",
+                moistureTooLowCritical: "गंभीर: नमी गंभीर रूप से कम! पौधों को मुरझाने से रोकने के लिए तत्काल सिंचाई की आवश्यकता है।",
+                moistureTooHighCritical: "गंभीर: नमी गंभीर रूप से अधिक! जड़ सड़न का जोखिम—सिंचाई कम करें।"
             },
             botInit: `नमस्ते! सिस्टम \${time} पर प्रारंभ हुआ। अब निगरानी कर रहा है...`
         },
@@ -191,7 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 goodEvening: "શુભ સાંજ. પરિસ્થિતિઓ સામાન્ય છે. પ્લાન્ટના પાંદડા તપાસવાનો સમય.",
                 moistureLowTip: "માટીની ભેજ ઘટી રહી છે. સિંચાઈ ચક્રોને ગોઠવવા વિચારો.",
                 highHumidityAlert: "ઉચ્ચ ભેજ શોધાયું. મોલ્ડને અટકાવવા માટે વેન્ટિલેશન વધારો.",
-                lowWindTip: "આજે શાંત પવન—પરાગણને સમર્થન આપવા માટે પંખાઓ ચાલુ છે તેની ખાતરી કરો."
+                lowWindTip: "આજે શાંત પવન—પરાગણને સમર્થન આપવા માટે પંખાઓ ચાલુ છે તેની ખાતરી કરો.",
+                moistureTooLowCritical: "ગંભીર: ભેજ ગંભીર રીતે નીચું! પાંદડા મરજવાથી રોકવા માટે તાત્કાલિક સિંચાઈ જરૂરી છે.",
+                moistureTooHighCritical: "ગંભીર: ભેજ ગંભીર રીતે વધારે! મૂળ સડવાનું જોખમ—સિંચાઈ ઘટાડો."
             },
             botInit: `નમસ્તે! સિસ્ટમ \${time} પર શરૂ થઈ. હવે મોનિટરિંગ...`
         }
@@ -207,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let tempChart = createChart(document.getElementById('tempChart').getContext('2d'), `${translations.en.waterTemperature} (°C)`, rootStyles.getPropertyValue('--accent-temp').trim(), 24, 36);
     let phChart = createChart(document.getElementById('phChart').getContext('2d'), translations.en.waterPhLevel, rootStyles.getPropertyValue('--accent-ph').trim(), 4, 8);
 
-    const weatherIcons = { 'Clear': '<path d="M32 12a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8z" fill="#fbb03b"/><path d="M32 8v-4M32 56v-4M12 12l-2.83-2.83M52 52l-2.83-2.83M8 32H4M60 32h-4M12 52l-2.83 2.83M52 12l-2.83 2.83" stroke="#fbb03b" stroke-width="4" stroke-linecap="round"/>', 'Clouds': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/>', 'Rain': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/><path d="M24 44l-2 8M32 44l-2 8M40 44l-2 8" stroke="#59a2ff" stroke-width="4" stroke-linecap="round"/>', 'Drizzle': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/><path d="M24 44l-1 4M32 44l-1 4M40 44l-1 4" stroke="#59a2ff" stroke-width="3" stroke-linecap="round"/>', 'Thunderstorm': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/><path d="M28 44l-4 8h4l-2 8l8-12h-4l4-4z" fill="#fbb03b" stroke="#fbb03b" stroke-width="2"/>', 'Snow': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/><path d="M32 44l-2 8M24 48l-4 4M40 48l4 4M28 44l4 8M24 48l4 4M36 48l-4 4" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>', 'Fog': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/><path d="M16 44h32M16 48h32M16 52h32" stroke="#b0b0b0" stroke-width="3"/>', 'Unknown': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/>'};
+    const weatherIcons = { 'Clear': '<path d="M32 12a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8z" fill="#fbb03b"/><path d="M32 8v-4M32 56v-4M12 12l-2.83-2.83M52 52l-2.83-2.83M8 32H4M60 32h-4M12 52l-2.83 2.83M52 12l-2.83 2.83" stroke="#fbb03b" stroke-width="4" stroke-linecap="round"/>', 'Clouds': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/>', 'Rain': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/><path d="M24 44l-2 8M32 44l-2 8M40 44l-2 8" stroke="#59a2ff" stroke-width="4" stroke-linecap="round"/>', 'Drizzle': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/><path d="M24 44l-1 4M32 44l-1 4M40 44l-1 4" stroke="#59a2ff" stroke-width="3" stroke-linecap="round"/>', 'Thunderstorm': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/><path d="M28 44l-4 8h4l-2 8l8-12h-4l4-4z" fill="#fbb03b" stroke="#fbb03b" stroke-width="2"/>', 'Snow': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/><path d="M32 44l-2 8M24 48l-4 4M40 48l4 4M28 48l4 8M24 48l4 4M36 48l-4 4" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>', 'Fog': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/><path d="M16 44h32M16 48h32M16 52h32" stroke="#b0b0b0" stroke-width="3"/>', 'Unknown': '<path d="M41.5 15.5A14.5 14.5 0 0014.6 22a10.5 10.5 0 00-1.1 20.9h32.1a12.5 12.5 0 00.4-24.9z" fill="#e6e6e6" stroke="#e6e6e6" stroke-width="3"/>'};
 
     const botState = { 
         messageLog: [], 
@@ -315,8 +321,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const newMsg = { id: msgId, key, type, timestamp, dynamicTime, dismissable: type !== 'greeting' && type !== 'tip' };
         botState.messageLog.unshift(newMsg);
         if (botState.messageLog.length > botState.MAX_LOG_MESSAGES) botState.messageLog.pop();
-        renderBotLogic();
-        saveBotLogic();  // Typo fix: saveBotState
+        renderBotLog();
+        saveBotState();
         updateBotMessage();
 
         // Voice for critical
@@ -378,8 +384,8 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (temp < 15) message = { key: 'tempLowCritical', type: "critical" };
         else if (temp > 35) message = { key: 'tempHighCritical', type: "critical" };
         // New moisture critical
-        else if (moisture < 10) message = { key: 'moistureTooLow', type: "critical" };  // Assuming too low is critical
-        else if (moisture > 90) message = { key: 'moistureTooHigh', type: "critical" };
+        else if (moisture < 10) message = { key: 'moistureTooLowCritical', type: "critical" };
+        else if (moisture > 90) message = { key: 'moistureTooHighCritical', type: "critical" };
 
         // Warnings
         else if (ph < 4.5) message = { key: 'phLowWarning', type: "warning" };
@@ -421,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.weatherFeelsLike.textContent = `${(weatherFeelsLike ?? '--').toFixed ? weatherFeelsLike.toFixed(1) : '--'}°C`;
         elements.weatherHumidity.textContent = `${parseInt(weatherHumidity) || '--'}%`;
         elements.weatherWind.textContent = `${(weatherWind ?? '--').toFixed ? weatherWind.toFixed(1) : '--'} km/h`;
-        elements.weatherDesc.textDesc = trans.weatherConditions[weatherCondition] || weatherCondition || 'Unknown';
+        elements.weatherDesc.textContent = trans.weatherConditions[weatherCondition] || weatherCondition || 'Unknown';
         elements.weatherIcon.innerHTML = weatherIcons[weatherCondition] || weatherIcons['Unknown'];
 
         const time = new Date().toLocaleTimeString();
